@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+const API = "https://inventorymanagementsystem-ims-production.up.railway.app";
 
 function Dashboard() {
   const [items, setItems] = useState([]);
@@ -12,31 +14,25 @@ function Dashboard() {
   const token = localStorage.getItem("token");
   const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
-      const res = await axios.get("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", authHeaders);
+      const res = await axios.get(`${API}/api/items`, authHeaders);
       setItems(res.data);
     } catch (err) {
       setError("Failed to fetch items");
     } finally {
       setLoading(false);
     }
-  };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
-    
-    axios.get("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", authHeaders)
-      .then(res => setItems(res.data))
-      .catch(err => setError("Failed to fetch items"))
-      .finally(() => setLoading(false));
-  }, []);
+    fetchItems();
+  }, [fetchItems]);
 
   const addItem = async () => {
     if (!form.name || !form.price || !form.quantity) return;
     try {
-      await axios.post("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", form, authHeaders);
+      await axios.post(`${API}/api/items`, form, authHeaders);
       setForm({ name: "", price: "", quantity: "" });
       fetchItems();
     } catch (err) {
@@ -46,7 +42,7 @@ function Dashboard() {
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete(`https://inventorymanagementsystem-ims-production.up.railway.app/api/items/${id}`, authHeaders);
+      await axios.delete(`${API}/api/items/${id}`, authHeaders);
       fetchItems();
     } catch (err) {
       setError("Failed to delete item");
@@ -62,14 +58,12 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
       <div className="bg-white shadow px-6 py-4 flex justify-between items-center">
         <h1 className="text-xl font-bold text-blue-600">📦 Inventory Manager</h1>
         <button onClick={logout} className="text-sm text-red-500 hover:underline">Logout</button>
       </div>
 
       <div className="max-w-5xl mx-auto p-6">
-        {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-2xl shadow p-4">
             <p className="text-gray-500 text-sm">Total Items</p>
@@ -81,7 +75,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Add Item Form */}
         <div className="bg-white rounded-2xl shadow p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Add New Item</h2>
           {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
@@ -116,7 +109,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Items Table */}
         <div className="bg-white rounded-2xl shadow overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
