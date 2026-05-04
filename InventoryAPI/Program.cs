@@ -68,7 +68,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
         policy => policy
-            .WithOrigins("http://localhost:3000") // React app URL
+            .WithOrigins(
+        "http://localhost:3000",
+        "https://inventory-management-system-ims-red.vercel.app"
+        ) // React app URL
             .AllowAnyHeader()
             .AllowAnyMethod());
 });

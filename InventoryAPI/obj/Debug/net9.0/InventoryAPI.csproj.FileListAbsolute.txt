@@ -281,3 +281,4 @@ D:\Ukasha's Data\SAAS\InventoryAPI\obj\Debug\net9.0\refint\InventoryAPI.dll
 D:\Ukasha's Data\SAAS\InventoryAPI\obj\Debug\net9.0\InventoryAPI.pdb
 D:\Ukasha's Data\SAAS\InventoryAPI\obj\Debug\net9.0\InventoryAPI.genruntimeconfig.cache
 D:\Ukasha's Data\SAAS\InventoryAPI\obj\Debug\net9.0\ref\InventoryAPI.dll
+D:\Ukasha's Data\SAAS\InventoryAPI\obj\Debug\net9.0\InventoryAPI.sourcelink.json
