@@ -1,8 +1,11 @@
 [build]
 builder = "nixpacks"
 
-[build.nixpacksPlan.phases.build]
-cmds = ["dotnet publish -c Release -o out"]
+[nixpacks]
+aptPkgs = ["dotnet-sdk-9.0"]
+
+[build.nixpacksPlan.phases.setup]
+nixPkgs = ["dotnet-sdk_9"]
 
 [deploy]
 startCmd = "dotnet out/InventoryAPI.dll"
