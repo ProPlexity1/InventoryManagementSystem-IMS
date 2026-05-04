@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacksPlan.phases.build]
+cmds = ["dotnet publish -c Release -o out"]
+
+[deploy]
+startCmd = "dotnet out/InventoryAPI.dll"
