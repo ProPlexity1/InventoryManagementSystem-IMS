@@ -12,7 +12,7 @@ function Login() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post("http://localhost:5235/api/users/login", form);
+      const res = await axios.post("https://inventorymanagementsystem-ims-production.up.railway.app/api/users/login", form);
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
