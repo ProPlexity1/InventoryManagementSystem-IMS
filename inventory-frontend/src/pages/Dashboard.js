@@ -89,19 +89,19 @@ function Dashboard() {
               className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               onChange={e => setForm({ ...form, name: e.target.value })}
             />
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2">
               <input
                 type="number"
                 placeholder="Price"
                 value={form.price}
-                className="border border-gray-300 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={e => setForm({ ...form, price: e.target.value })}
               />
               <input
                 type="number"
                 placeholder="Quantity"
                 value={form.quantity}
-                className="border border-gray-300 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={e => setForm({ ...form, quantity: e.target.value })}
               />
             </div>
