@@ -6,13 +6,13 @@ function ItemList() {
   const [newItem, setNewItem] = useState({ name: "", price: "", quantity: "" });
 
   useEffect(() => {
-    axios.get("http://localhost:5235/api/items")  // changed https to http
+    axios.get("https://inventorymanagementsystem-ims-production.up.railway.app/api/items")  // changed https to http
       .then(res => setItems(res.data))
       .catch(err => console.error("Fetch error:", err));  // better error logging
   }, []);
   
   const addItem = () => {
-    axios.post("http://localhost:5235/api/items", newItem)
+    axios.post("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", newItem)
       .then(res => setItems([...items, res.data]));
   };
 

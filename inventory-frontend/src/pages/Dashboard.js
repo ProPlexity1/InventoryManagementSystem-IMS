@@ -14,7 +14,7 @@ function Dashboard() {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://localhost:5235/api/items", authHeaders);
+      const res = await axios.get("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", authHeaders);
       setItems(res.data);
     } catch (err) {
       setError("Failed to fetch items");
@@ -30,7 +30,7 @@ function Dashboard() {
   const addItem = async () => {
     if (!form.name || !form.price || !form.quantity) return;
     try {
-      await axios.post("http://localhost:5235/api/items", form, authHeaders);
+      await axios.post("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", form, authHeaders);
       setForm({ name: "", price: "", quantity: "" });
       fetchItems();
     } catch (err) {
@@ -40,7 +40,7 @@ function Dashboard() {
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:5235/api/items/${id}`, authHeaders);
+      await axios.delete(`https://inventorymanagementsystem-ims-production.up.railway.app/api/items/${id}`, authHeaders);
       fetchItems();
     } catch (err) {
       setError("Failed to delete item");

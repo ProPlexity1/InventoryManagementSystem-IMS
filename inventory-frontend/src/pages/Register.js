@@ -12,7 +12,7 @@ function Register() {
     setLoading(true);
     setError("");
     try {
-      await axios.post("http://localhost:5235/api/users/signup", form);
+      await axios.post("https://inventorymanagementsystem-ims-production.up.railway.app/api/users/signup", form);
       navigate("/login");
     } catch (err) {
       setError("Registration failed. Try again.");
