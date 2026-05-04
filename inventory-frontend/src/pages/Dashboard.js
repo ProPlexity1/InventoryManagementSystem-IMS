@@ -24,7 +24,13 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    fetchItems();
+    const token = localStorage.getItem("token");
+    const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
+    
+    axios.get("https://inventorymanagementsystem-ims-production.up.railway.app/api/items", authHeaders)
+      .then(res => setItems(res.data))
+      .catch(err => setError("Failed to fetch items"))
+      .finally(() => setLoading(false));
   }, []);
 
   const addItem = async () => {
