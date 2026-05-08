@@ -7,6 +7,7 @@ const API = "https://inventorymanagementsystem-ims-production.up.railway.app";
 function Dashboard() {
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({ name: "", price: "", quantity: "" });
+  const [editingItem, setEditingItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -38,6 +39,34 @@ function Dashboard() {
     } catch (err) {
       setError("Failed to add item");
     }
+  };
+
+  const startEdit = (item) => {
+    setEditingItem(item);
+    setForm({ name: item.name, price: item.price, quantity: item.quantity });
+  };
+
+  const saveEdit = async () => {
+    if (!form.name || !form.price || !form.quantity) return;
+    try {
+      await axios.put(`${API}/api/items/${editingItem.id}`, {
+        id: editingItem.id,
+        name: form.name,
+        price: parseFloat(form.price),
+        quantity: parseInt(form.quantity),
+        userId: editingItem.userId
+      }, authHeaders);
+      setEditingItem(null);
+      setForm({ name: "", price: "", quantity: "" });
+      fetchItems();
+    } catch (err) {
+      setError("Failed to update item");
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingItem(null);
+    setForm({ name: "", price: "", quantity: "" });
   };
 
   const deleteItem = async (id) => {
@@ -77,9 +106,11 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Add Item Form */}
+        {/* Add / Edit Form */}
         <div className="bg-white rounded-2xl shadow p-4 mb-4">
-          <h2 className="text-base font-semibold text-gray-700 mb-3">Add New Item</h2>
+          <h2 className="text-base font-semibold text-gray-700 mb-3">
+            {editingItem ? "✏️ Edit Item" : "Add New Item"}
+          </h2>
           {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
           <div className="flex flex-col gap-2">
             <input
@@ -105,16 +136,35 @@ function Dashboard() {
                 onChange={e => setForm({ ...form, quantity: e.target.value })}
               />
             </div>
-            <button
-              onClick={addItem}
-              className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-semibold w-full"
-            >
-              Add Item
-            </button>
+            <div className="flex gap-2">
+              {editingItem ? (
+                <>
+                  <button
+                    onClick={saveEdit}
+                    className="bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition font-semibold flex-1"
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={cancelEdit}
+                    className="bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition font-semibold flex-1"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={addItem}
+                  className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-semibold w-full"
+                >
+                  Add Item
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Items - Card view on mobile, table on desktop */}
+        {/* Items List */}
         <div className="bg-white rounded-2xl shadow overflow-hidden">
           <h2 className="text-base font-semibold text-gray-700 p-4 border-b">Inventory</h2>
 
@@ -127,18 +177,28 @@ function Dashboard() {
               {/* Mobile card view */}
               <div className="md:hidden divide-y divide-gray-100">
                 {items.map(item => (
-                  <div key={item.id} className="p-4 flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold text-gray-800">{item.name}</p>
-                      <p className="text-sm text-gray-500">Rs {item.price} × {item.quantity}</p>
-                      <p className="text-sm font-medium text-green-600">Rs {(item.price * item.quantity).toLocaleString()}</p>
+                  <div key={item.id} className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold text-gray-800">{item.name}</p>
+                        <p className="text-sm text-gray-500">Rs {item.price} × {item.quantity}</p>
+                        <p className="text-sm font-medium text-green-600">Rs {(item.price * item.quantity).toLocaleString()}</p>
+                      </div>
+                      <div className="flex gap-3 ml-4">
+                        <button
+                          onClick={() => startEdit(item)}
+                          className="text-blue-500 hover:text-blue-700 text-sm font-medium"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => deleteItem(item.id)}
+                          className="text-red-500 hover:text-red-700 text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => deleteItem(item.id)}
-                      className="text-red-500 hover:text-red-700 text-sm font-medium ml-4"
-                    >
-                      Delete
-                    </button>
                   </div>
                 ))}
               </div>
@@ -162,12 +222,20 @@ function Dashboard() {
                       <td className="px-6 py-4 text-gray-600">{item.quantity}</td>
                       <td className="px-6 py-4 text-green-600 font-medium">Rs {(item.price * item.quantity).toLocaleString()}</td>
                       <td className="px-6 py-4">
-                        <button
-                          onClick={() => deleteItem(item.id)}
-                          className="text-red-500 hover:text-red-700 font-medium"
-                        >
-                          Delete
-                        </button>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => startEdit(item)}
+                            className="text-blue-500 hover:text-blue-700 font-medium"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => deleteItem(item.id)}
+                            className="text-red-500 hover:text-red-700 font-medium"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
