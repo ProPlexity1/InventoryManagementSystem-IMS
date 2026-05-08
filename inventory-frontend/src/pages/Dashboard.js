@@ -11,6 +11,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
   const token = localStorage.getItem("token");
   const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
@@ -84,6 +85,9 @@ function Dashboard() {
   };
 
   const totalValue = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const filteredItems = items.filter(item =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -166,7 +170,16 @@ function Dashboard() {
 
         {/* Items List */}
         <div className="bg-white rounded-2xl shadow overflow-hidden">
-          <h2 className="text-base font-semibold text-gray-700 p-4 border-b">Inventory</h2>
+          <div className="p-4 border-b flex flex-col md:flex-row gap-2 md:items-center justify-between">
+            <h2 className="text-base font-semibold text-gray-700">Inventory</h2>
+            <input
+              type="text"
+              placeholder="🔍 Search items..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 md:w-64"
+            />
+          </div>
 
           {loading ? (
             <p className="text-center py-6 text-gray-400">Loading...</p>
@@ -176,7 +189,7 @@ function Dashboard() {
             <>
               {/* Mobile card view */}
               <div className="md:hidden divide-y divide-gray-100">
-                {items.map(item => (
+                {filteredItems.map(item => (
                   <div key={item.id} className="p-4">
                     <div className="flex justify-between items-start">
                       <div>
@@ -215,7 +228,7 @@ function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {items.map(item => (
+                  {filteredItems.map(item => (
                     <tr key={item.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 font-medium text-gray-800">{item.name}</td>
                       <td className="px-6 py-4 text-gray-600">Rs {item.price}</td>
