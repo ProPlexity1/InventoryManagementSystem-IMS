@@ -118,30 +118,6 @@ function DashboardMockup() {
 }
 
 // ─────────────────────────────────────────────
-//  FEATURE CARD
-// ─────────────────────────────────────────────
-function FeatureCard({ icon, title, desc, accent, delay }) {
-    const ref = useRef(null);
-    useEffect(() => {
-        const el = ref.current;
-        const obs = new IntersectionObserver(
-            ([e]) => { if (e.isIntersecting) { el.classList.add("visible"); obs.disconnect(); } },
-            { threshold: 0.15 }
-        );
-        obs.observe(el);
-        return () => obs.disconnect();
-    }, []);
-    return (
-        <div ref={ref} className="feat-card fade-up" style={{ transitionDelay: `${delay}ms` }}>
-            <div className="feat-icon" style={{ color: accent }}>{icon}</div>
-            <h3 className="feat-title">{title}</h3>
-            <p className="feat-desc">{desc}</p>
-            <div className="feat-line" style={{ background: accent }} />
-        </div>
-    );
-}
-
-// ─────────────────────────────────────────────
 //  REVEAL wrapper
 // ─────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }) {
@@ -828,7 +804,7 @@ export default function Landing() {
             {/* ── FEATURES ── */}
             <section className="feat-section" id="features">
               <Reveal className="feat-header">
-                <p className="feat-label">By the numbers</p>
+                <p className="feat-label">Features</p>
                 <h2 className="feat-title">Built to make your life easier</h2>
               </Reveal>
               <Reveal delay={100}>
