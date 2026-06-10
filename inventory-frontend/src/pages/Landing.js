@@ -1,159 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import * as THREE from "three";
 
-// ─────────────────────────────────────────────
-//  THREE.JS BACKGROUND CANVAS
-// ─────────────────────────────────────────────
-function ThreeBackground() {
-    const mountRef = useRef(null);
-
-    useEffect(() => {
-        const mount = mountRef.current;
-        const W = mount.clientWidth;
-        const H = mount.clientHeight;
-
-        // Scene
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, W / H, 0.1, 100);
-        camera.position.z = 3;
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(W, H);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setClearColor(0x000000, 0);
-        mount.appendChild(renderer.domElement);
-
-        // Particles
-        const count = 1800;
-        const positions = new Float32Array(count * 3);
-        const colors = new Float32Array(count * 3);
-
-        const cyan = new THREE.Color("#00B4D8");
-        const purple = new THREE.Color("#C77DFF");
-
-        for (let i = 0; i < count; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 12;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 12;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 8;
-
-            const mix = Math.random();
-            const c = cyan.clone().lerp(purple, mix);
-            colors[i * 3] = c.r;
-            colors[i * 3 + 1] = c.g;
-            colors[i * 3 + 2] = c.b;
-        }
-
-        const geo = new THREE.BufferGeometry();
-        geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-        geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
-        const mat = new THREE.PointsMaterial({
-            size: 0.022,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.7,
-            sizeAttenuation: true,
-        });
-
-        const particles = new THREE.Points(geo, mat);
-        scene.add(particles);
-
-        // Two large glowing spheres for depth
-        const addGlow = (color, x, y, z, r) => {
-            const g = new THREE.SphereGeometry(r, 32, 32);
-            const m = new THREE.MeshBasicMaterial({
-                color, transparent: true, opacity: 0.04,
-            });
-            const mesh = new THREE.Mesh(g, m);
-            mesh.position.set(x, y, z);
-            scene.add(mesh);
-            return mesh;
-        };
-        const glow1 = addGlow(0x00B4D8, -2, 1, -1, 2.5);
-        const glow2 = addGlow(0xC77DFF, 2, -1, -1, 2);
-
-        // Mouse
-        const mouse = { x: 0, y: 0 };
-        const onMouseMove = (e) => {
-            mouse.x = (e.clientX / window.innerWidth - 0.5) * 2;
-            mouse.y = (e.clientY / window.innerHeight - 0.5) * 2;
-        };
-        window.addEventListener("mousemove", onMouseMove);
-
-        // Resize
-        const onResize = () => {
-            const w = mount.clientWidth;
-            const h = mount.clientHeight;
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-            renderer.setSize(w, h);
-        };
-        window.addEventListener("resize", onResize);
-
-        // Animate
-        let frame;
-        const clock = new THREE.Clock();
-        const animate = () => {
-            frame = requestAnimationFrame(animate);
-            const t = clock.getElapsedTime();
-
-            particles.rotation.y = t * 0.025;
-            particles.rotation.x = t * 0.01;
-
-            // Subtle mouse parallax on particles
-            particles.rotation.y += mouse.x * 0.0008;
-            particles.rotation.x += mouse.y * 0.0005;
-
-            // Glows breathe
-            glow1.position.x = -2 + Math.sin(t * 0.4) * 0.5;
-            glow1.position.y = 1 + Math.cos(t * 0.3) * 0.4;
-            glow2.position.x = 2 + Math.cos(t * 0.35) * 0.4;
-            glow2.position.y = -1 + Math.sin(t * 0.45) * 0.3;
-
-            renderer.render(scene, camera);
-        };
-        animate();
-
-        return () => {
-            cancelAnimationFrame(frame);
-            window.removeEventListener("mousemove", onMouseMove);
-            window.removeEventListener("resize", onResize);
-            if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-            renderer.dispose();
-            geo.dispose();
-            mat.dispose();
-        };
-    }, []);
-
-    return (
-        <div
-            ref={mountRef}
-            style={{
-                position: "absolute", inset: 0,
-                zIndex: 0, pointerEvents: "none",
-            }}
-        />
-    );
-}
 
 // ─────────────────────────────────────────────
 //  TICKER
 // ─────────────────────────────────────────────
 function Ticker() {
-    const items = ["INVENTORY", "TRACKING", "STOCK CONTROL", "ANALYTICS", "FREE FOREVER", "SMALL BUSINESS"];
-    const doubled = [...items, ...items];
-    return (
-        <div className="ticker-wrap">
-            <div className="ticker-track">
-                {doubled.map((t, i) => (
-                    <span key={i} className="ticker-item">
-                        {t} <span className="ticker-dot">✦</span>
-                    </span>
-                ))}
-            </div>
-        </div>
-    );
+  const items = ["INVENTORY", "TRACKING", "STOCK CONTROL", "ANALYTICS", "FREE FOREVER", "SMALL BUSINESS"];
+  const tripled = [...items, ...items, ...items];
+  return (
+    <div className="ticker-wrap">
+      <div className="ticker-track">
+        {tripled.map((t, i) => (
+          <span key={i} className="ticker-item">
+            {t} <span className="ticker-dot">✦</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 // ─────────────────────────────────────────────
@@ -301,20 +166,52 @@ function Reveal({ children, delay = 0, className = "" }) {
 //  MAIN LANDING
 // ─────────────────────────────────────────────
 export default function Landing() {
-    const features = [
-        { icon: "⚡", title: "Instant Updates", desc: "Add, edit, or remove stock in seconds. Changes reflect immediately.", accent: "#00B4D8" },
-        { icon: "🔍", title: "Smart Search", desc: "Find any item by name instantly. No scrolling, no wasted time.", accent: "#C77DFF" },
-        { icon: "📊", title: "Live Value Tracking", desc: "Total inventory value recalculates automatically as you work.", accent: "#00B4D8" },
-        { icon: "📱", title: "Works on Mobile", desc: "Full mobile-responsive design. Manage stock from anywhere.", accent: "#C77DFF" },
-        { icon: "🔐", title: "Secure by Default", desc: "JWT auth keeps your data private. Every account is fully isolated.", accent: "#00B4D8" },
-    ];
-
     const steps = [
         { num: "01", title: "Create your account", desc: "Sign up in under 30 seconds. No credit card, no subscription required." },
         { num: "02", title: "Add your inventory", desc: "Enter items with name, price, and quantity. Takes minutes to set up." },
         { num: "03", title: "Track and manage", desc: "Search, edit, delete — your stock is always accurate and up to date." },
-    ];
+  ];
+  
+  useEffect(() => {
+      const orbConfigs = [
+        { selector: ".orb-1", factorX: 0.12, factorY: 0.08 },
+        { selector: ".orb-2", factorX: -0.09, factorY: 0.07 },
+        { selector: ".orb-3", factorX: 0.06, factorY: -0.10 },
+        { selector: ".orb-4", factorX: -0.07, factorY: 0.06 },
+        { selector: ".orb-5", factorX: 0.10, factorY: 0.09 },
+      ];
 
+      const current = orbConfigs.map(() => ({ x: 0, y: 0 }));
+      const target = orbConfigs.map(() => ({ x: 0, y: 0 }));
+      let rafId;
+
+      const onScroll = () => {
+        const sy = window.scrollY;
+        orbConfigs.forEach((cfg, i) => {
+          target[i].x = sy * cfg.factorX;
+          target[i].y = sy * cfg.factorY;
+        });
+      };
+
+      const tick = () => {
+        orbConfigs.forEach((cfg, i) => {
+          // lerp current toward target — 0.05 = lazy follow speed
+          current[i].x += (target[i].x - current[i].x) * 0.05;
+          current[i].y += (target[i].y - current[i].y) * 0.05;
+          const el = document.querySelector(cfg.selector);
+          if (el) el.style.transform = `translate(${current[i].x}px, ${current[i].y}px)`;
+        });
+        rafId = requestAnimationFrame(tick);
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      rafId = requestAnimationFrame(tick);
+
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        cancelAnimationFrame(rafId);
+      };
+    }, []);
     return (
         <>
             <style>{`
@@ -339,6 +236,52 @@ export default function Landing() {
           background: var(--bg); color: var(--text);
           font-family: 'Plus Jakarta Sans', sans-serif;
           overflow-x: hidden;
+        }
+        /* ── MESH ORBS ── */
+        .orb-container {
+          position: fixed; inset: 0;
+          z-index: 0; pointer-events: none;
+          overflow: hidden;
+        }
+        .orb {
+          position: absolute; border-radius: 50%;
+          filter: blur(90px); opacity: 0.45;
+          will-change: transform;
+          transition: transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .orb-1 {
+          width: 600px; height: 600px;
+          top: -100px; left: -150px;
+          background: radial-gradient(circle, #00B4D8 0%, transparent 70%);
+        }
+        .orb-2 {
+          width: 500px; height: 500px;
+          top: 20%; right: -120px;
+          background: radial-gradient(circle, #C77DFF 0%, transparent 70%);
+        }
+        .orb-3 {
+          width: 420px; height: 420px;
+          top: 55%; left: 25%;
+          background: radial-gradient(circle, #00B4D8 0%, transparent 70%);
+          opacity: 0.3;
+        }
+        .orb-4 {
+          width: 350px; height: 350px;
+          top: 70%; right: 10%;
+          background: radial-gradient(circle, #C77DFF 0%, transparent 70%);
+          opacity: 0.25;
+        }
+        .orb-5 {
+          width: 280px; height: 280px;
+          top: 35%; left: 5%;
+          background: radial-gradient(circle, #C77DFF 0%, transparent 70%);
+          opacity: 0.2;
+        }
+
+        /* vignette so orbs don't bleed into text */
+        .orb-vignette {
+          position: fixed; inset: 0; z-index: 0; pointer-events: none;
+          background: radial-gradient(ellipse at center, transparent 40%, rgba(3,3,3,0.88) 100%);
         }
 
         /* ── NAV ─────────────────────────── */
@@ -499,7 +442,7 @@ export default function Landing() {
         .ticker-item:hover { color: var(--cyan); }
         .ticker-dot { color: var(--purple); margin-left: 8px; }
         @keyframes tickerScroll {
-          from { transform: translateX(0); }
+          from { transform: translateX(=33.333%); }
           to   { transform: translateX(-50%); }
         }
 
@@ -634,7 +577,7 @@ export default function Landing() {
 
         /* ── FEATURES ─────────────────────── */
         .feat-section { padding: 120px 6vw; }
-        .feat-header { margin-bottom: 64px; }
+        .feat-header { margin-bottom: 48px; }
         .feat-label {
           font-family: 'JetBrains Mono', monospace;
           font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
@@ -645,25 +588,47 @@ export default function Landing() {
           font-weight: 500; font-size: clamp(1.8rem, 4vw, 2.8rem);
           letter-spacing: -0.02em; line-height: 1.1; max-width: 500px;
         }
-        .feat-grid {
-          display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        .stats-bar {
+          display: grid; grid-template-columns: repeat(4, 1fr);
           gap: 1px; background: var(--border);
           border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
         }
-        .feat-card {
+        .stat-bar-card {
           background: var(--bg); padding: 32px 28px;
+          display: flex; flex-direction: column; gap: 8px;
           position: relative; overflow: hidden;
           transition: background 0.3s;
         }
-        .feat-card:hover { background: #0D0D0D; }
-        .feat-icon { font-size: 1.5rem; margin-bottom: 16px; }
-        .feat-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; color: var(--text); }
-        .feat-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.65; }
-        .feat-line {
-          position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+        .stat-bar-card:hover { background: #0D0D0D; }
+        .stat-bar-card::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+          background: linear-gradient(90deg, transparent, var(--cyan), transparent);
           opacity: 0; transition: opacity 0.3s;
         }
-        .feat-card:hover .feat-line { opacity: 1; }
+        .stat-bar-card:nth-child(even)::before {
+          background: linear-gradient(90deg, transparent, var(--purple), transparent);
+        }
+        .stat-bar-card:hover::before { opacity: 1; }
+        .stat-bar-val {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 700; font-size: 2.2rem; letter-spacing: -0.03em;
+          color: var(--cyan);
+        }
+        .stat-bar-card:nth-child(even) .stat-bar-val { color: var(--purple); }
+        .stat-bar-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
+          text-transform: uppercase; color: var(--text);
+        }
+        .stat-bar-desc {
+          font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-top: 2px;
+        }
+        @media (max-width: 768px) {
+          .stats-bar { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+          .stat-bar-val { font-size: 1.6rem; }
+        }
 
         /* ── HOW IT WORKS ─────────────────── */
         .steps-section { padding: 120px 6vw; border-top: 1px solid var(--border); }
@@ -773,8 +738,18 @@ export default function Landing() {
           .btn-ghost.nav-ghost { display: none; }
           .hero-headline { font-size: 2.4rem; }
         }
-      `}</style>
-
+      `}
+        
+        </style>
+            {/* ── MESH ORBS (fixed, scroll-reactive) ── */}
+            <div className="orb-container">
+              <div className="orb orb-1" />
+              <div className="orb orb-2" />
+              <div className="orb orb-3" />
+              <div className="orb orb-4" />
+              <div className="orb orb-5" />
+            </div>
+            <div className="orb-vignette" />
             {/* ── NAV ── */}
             <nav className="nav">
                 <div className="nav-logo">Stock<span>Ease</span></div>
@@ -791,7 +766,6 @@ export default function Landing() {
 
             {/* ── HERO ── */}
             <section className="hero">
-                <ThreeBackground />
                 <div className="hero-vignette" />
 
                 <div className="hero-content">
@@ -853,15 +827,26 @@ export default function Landing() {
 
             {/* ── FEATURES ── */}
             <section className="feat-section" id="features">
-                <Reveal className="feat-header">
-                    <p className="feat-label">Features</p>
-                    <h2 className="feat-title">Everything you need, nothing you don't</h2>
-                </Reveal>
-                <div className="feat-grid">
-                    {features.map((f, i) => (
-                        <FeatureCard key={i} {...f} delay={i * 70} />
-                    ))}
+              <Reveal className="feat-header">
+                <p className="feat-label">By the numbers</p>
+                <h2 className="feat-title">Built to make your life easier</h2>
+              </Reveal>
+              <Reveal delay={100}>
+                <div className="stats-bar">
+                  {[
+                    { val: "100%", label: "Free Forever", desc: "No subscriptions, no hidden fees. Ever." },
+                    { val: "30s", label: "Setup Time", desc: "From signup to first item tracked." },
+                    { val: "∞", label: "Items Supported", desc: "No cap on your inventory size." },
+                    { val: "JWT", label: "Secure Auth", desc: "Every account isolated and protected." },
+                  ].map((s, i) => (
+                    <div className="stat-bar-card" key={i}>
+                      <div className="stat-bar-val">{s.val}</div>
+                      <div className="stat-bar-label">{s.label}</div>
+                      <div className="stat-bar-desc">{s.desc}</div>
+                    </div>
+                  ))}
                 </div>
+              </Reveal>
             </section>
 
             {/* ── HOW IT WORKS ── */}
