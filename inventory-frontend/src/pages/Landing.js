@@ -867,13 +867,13 @@ export default function Landing() {
 
             {/* ── FOOTER ── */}
             <footer className="footer">
-                <div className="footer-logo">Stock<span>Ease</span></div>
+                <div className="footer-logo">Stor<span>ix</span></div>
                 <div className="footer-links">
                     <a href="#features">Features</a>
                     <a href="#how">How it works</a>
                     <Link to="/login">Sign in</Link>
                 </div>
-                <p className="footer-copy">Built by ProPlexity · Free forever</p>
+                <p className="footer-copy">Built by ProPlexity1 · Free forever</p>
             </footer>
         </>
     );
