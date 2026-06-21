@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj": {}
+    "E:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj": {}
   },
   "projects": {
-    "D:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj": {
+    "E:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj",
+        "projectUniqueName": "E:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj",
         "projectName": "InventoryAPI",
-        "projectPath": "D:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj",
-        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\Ukasha's Data\\SAAS\\InventoryAPI\\obj\\",
+        "projectPath": "E:\\Ukasha's Data\\SAAS\\InventoryAPI\\InventoryAPI.csproj",
+        "packagesPath": "C:\\Users\\ZESTRO\\.nuget\\packages\\",
+        "outputPath": "E:\\Ukasha's Data\\SAAS\\InventoryAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ZESTRO\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -24,6 +24,7 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -38,10 +39,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "BCrypt.Net-Next": {
@@ -89,19 +91,19 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.11, 9.0.11]"
+              "version": "[9.0.16, 9.0.16]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[9.0.11, 9.0.11]"
+              "version": "[9.0.16, 9.0.16]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.11, 9.0.11]"
+              "version": "[9.0.16, 9.0.16]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[9.0.11, 9.0.11]"
+              "version": "[9.0.16, 9.0.16]"
             }
           ],
           "frameworkReferences": {
@@ -112,7 +114,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

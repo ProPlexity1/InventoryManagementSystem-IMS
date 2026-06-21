@@ -180,7 +180,7 @@ function Login() {
       <div className="auth-vignette" />
       <div className="auth-page">
         <div className="auth-card">
-          <Link to="/" className="auth-logo">Stock<span>Ease</span></Link>
+          <Link to="/" className="auth-logo">Stor<span>ix</span></Link>
           <Link to="/" className="auth-back">← Back to home</Link>
           <h1 className="auth-heading">Welcome back</h1>
           <p className="auth-sub">Sign in to your inventory dashboard</p>

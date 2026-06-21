@@ -54,11 +54,11 @@ function DashboardMockup() {
                     <span className="m-dot" style={{ background: "#FF5F57" }} />
                     <span className="m-dot" style={{ background: "#FFBD2E" }} />
                     <span className="m-dot" style={{ background: "#28CA41" }} />
-                    <span className="m-url">stockease.app — dashboard</span>
+                    <span className="m-url">storix.app — dashboard</span>
                 </div>
                 {/* app navbar */}
                 <div className="m-nav">
-                    <span className="m-brand">📦 StockEase</span>
+                    <span className="m-brand">📦 storix</span>
                     <span className="m-navlinks">
                         <span>Dashboard</span><span>Items</span><span>Reports</span>
                     </span>
@@ -728,7 +728,7 @@ export default function Landing() {
             <div className="orb-vignette" />
             {/* ── NAV ── */}
             <nav className="nav">
-                <div className="nav-logo">Stock<span>Ease</span></div>
+                <div className="nav-logo">Stor<span>ix</span></div>
                 <ul className="nav-links">
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how">How it works</a></li>
@@ -757,7 +757,7 @@ export default function Landing() {
                     </div>
 
                     <p className="hero-sub">
-                        StockEase gives small businesses a clean, fast way to track stock,
+                        storix gives small businesses a clean, fast way to track stock,
                         monitor value, and stay on top of inventory — completely free, forever.
                     </p>
 
@@ -856,7 +856,7 @@ export default function Landing() {
                 <Reveal delay={100}>
                     <h2 className="cta-title">Your stock, <span className="cyan">under control</span></h2>
                 </Reveal>
-                <Reveal delay={200}><p className="cta-sub">Join businesses already using StockEase. Free forever, no card needed.</p></Reveal>
+                <Reveal delay={200}><p className="cta-sub">Join businesses already using storix. Free forever, no card needed.</p></Reveal>
                 <Reveal delay={300}>
                     <div className="cta-buttons">
                         <Link to="/register" className="btn-primary btn-large">Create free account →</Link>

@@ -313,7 +313,7 @@ export default function Dashboard() {
       {/* ── NAV ── */}
       <nav className="db-nav">
         <div className="db-nav-left">
-          <Link to="/" className="db-logo">Stock<span>Ease</span></Link>
+          <Link to="/" className="db-logo">Stor<span>ix</span></Link>
           <span className="db-nav-label">Dashboard</span>
         </div>
         <div className="db-nav-right">

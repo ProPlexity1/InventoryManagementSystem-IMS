@@ -109,7 +109,7 @@ function Register() {
       <div className="auth-vignette" />
       <div className="auth-page">
         <div className="auth-card">
-          <Link to="/" className="auth-logo">Stock<span>Ease</span></Link>
+          <Link to="/" className="auth-logo">Stor<span>ix</span></Link>
           <Link to="/" className="auth-back">← Back to home</Link>
           <h1 className="auth-heading">Create account</h1>
           <p className="auth-sub">Start managing your inventory for free</p>
